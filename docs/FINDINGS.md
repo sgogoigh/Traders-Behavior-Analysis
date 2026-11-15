@@ -94,17 +94,30 @@
 
 ## Phase 4: Feature Engineering & Behavioral/Risk Metrics
 
-- **Status:** Code Ready in `notebook_1.ipynb` (awaiting user execution in Jupyter)
-- **Planned Outputs:**
-  - `csv_files/03_features_daily_regime.csv` (daily regime, rolling volume/PnL, dispersion, contrarian share)
-  - `csv_files/04_features_trader_profiles.csv` (32-account performance, drawdown/IR, taker/spot mix, Fear-vs-Greed behavior & contrarian bias shift)
-  - `outputs/06_features_distributions.png`, `outputs/06_features_summary_table.png`, `outputs/06_features_fear_vs_greed_trader_scatter.png`
+- **Status:** Completed (executed locally by user in `notebook_1.ipynb` Section 4)
+- **Generated Datasets:**
+  - `csv_files/03_features_daily_regime.csv`: **476 active UTC days x 43 columns** (`2023-04-30` to `2025-05-01`), combining daily sentiment lags/moving averages/volatility/streak indicators with daily activity, sizing, execution (`taker_pct`, `spot_pct`, `avg_fee_bps`), PnL efficiency, directional/contrarian open counts, and 7-day rolling windows.
+  - `csv_files/04_features_trader_profiles.csv`: **32 trader accounts x 63 columns** covering total activity, active/calendar span, sizing dispersion (`median_size_usd`, `p90_size_usd`, `size_cv`), execution mix, closing PnL & fee net-efficiency, daily PnL stability (`daily_pnl_ir`, `max_daily_drawdown_usd`, `profitable_days_pct`), directional/contrarian share, top-coin concentration, and Fear-vs-Greed regime splits.
+- **Verified Summary Statistics Across All 32 Accounts (`csv_files/04_features_trader_profiles.csv`, `outputs/06_features_summary_table.png`):**
+  - **Participation & Volume:** Every account has at least **332 trades** (`min = 332`, `median = 3,699`, `mean = 6,600.75`, `max = 40,184`), so all 32 accounts remain eligible for Phase 5 segmentation. `total_volume_usd` averages **\$37.22M** (median **\$11.74M**, min **\$728.06K**, max **\$420.88M**).
+  - **Sizing & Dispersion:** `median_size_usd` averages **\$1,189.71** (median **\$658.98**, min **\$148.31**, max **\$7,755.14**), with `size_cv` averaging **3.00** (median **3.06**, range **1.30–5.67**).
+  - **Execution Style (Bimodal):** `taker_pct` averages **51.44%** (median **58.12%**, min **0.28%**, max **100.00%**), with `outputs/06_features_distributions.png` showing a clear split between maker-focused accounts (`< 25%` taker) and taker-heavy accounts (`> 70%` taker). `spot_pct` averages **17.89%** (median **6.98%**, range **0.00%–72.68%**).
+  - **Risk-Adjusted Performance & Efficiency:** `win_rate_pct` averages **85.01%** (median **84.20%**, min **59.90%**, max **100.00%**); `pnl_per_1m_volume` averages **\$28,889.93** (median **\$12,666.87**, range **-\$22,131.75** to **+\$149,344.27**); `daily_pnl_ir` averages **0.31** (median **0.31**, range **-0.16** to **0.68**); `max_daily_drawdown_usd` averages **-\$51,042.47** (median **-\$16,766.61**, worst **-\$369,393.23**, best **\$0.00**).
+  - **Contrarian Orientation & Regime Shifts:** `contrarian_open_share_pct` averages **51.21%** (median **54.88%**, range **15.85%–99.97%**). Among accounts active in both Fear and Greed (`count = 31`), `contrarian_bias_shift` (Fear minus Greed contrarian share) averages **-1.00 pp** (median **0.00 pp**, range **-100.00 pp** to **+53.42 pp**).
+- **Edge Cases / Feature Hygiene Notes for Phase 5 Clustering:**
+  - `profit_factor` is `NaN` for **4 accounts** (`count = 28`) that recorded **\$0 gross loss** (`100%` closing win rate: `0x3f9a...6cf6`, `0x420a...4641`, `0x430f...7713`, `0xae5e...82ed`).
+  - `contrarian_bias_shift` (and Greed splits) are `NaN` for **1 account** (`count = 31`: `0xb899...2115`), which executed **4,532 Fear trades** and **0 Greed trades**. Phase 5 clustering will therefore use complete `32/32` non-null metrics (`win_rate_pct`, `daily_pnl_ir`, `pnl_per_1m_volume`, `contrarian_open_share_pct`, etc.) for scaling/KMeans and analyze `profit_factor` and `contrarian_bias_shift` post-hoc per cluster.
+- **Visual Outputs Inspected:**
+  - `outputs/06_features_summary_table.png`, `outputs/06_features_distributions.png`, `outputs/06_features_fear_vs_greed_trader_scatter.png`
 
 ---
 
 ## Phase 5: Statistical Testing, Trader Segmentation & Signal Discovery
 
-- **Status:** Not Started
+- **Status:** Code Ready in `notebook_2.ipynb` (Sections 1–4; awaiting user execution in Jupyter)
+- **Planned Outputs:**
+  - `csv_files/05_stats_regime_tests.csv`, `csv_files/05_stats_bootstrap_ci.csv`, `csv_files/06_trader_clusters.csv`, `csv_files/06_cluster_summary.csv`, `csv_files/07_signals_summary.csv`
+  - `outputs/07_stats_*.png`, `outputs/08_clusters_*.png`, `outputs/09_signals_*.png`
 
 ---
 

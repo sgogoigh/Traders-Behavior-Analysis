@@ -32,8 +32,8 @@ Traders-Behavior-Analysis/
 | **Phase 1** | Data Acquisition & Initial Schema Inspection | `notebook_1.ipynb`, `csv_files/` | `[x]` Completed |
 | **Phase 2** | Data Cleaning, Normalization & Temporal Alignment | `notebook_1.ipynb`, `csv_files/01_*.csv`, `outputs/01_*.png` | `[x]` Completed |
 | **Phase 3** | Exploratory Data Analysis (EDA) & Visual Logging | `notebook_1.ipynb`, `outputs/02_*` – `05_*.png` | `[x]` Completed |
-| **Phase 4** | Feature Engineering & Behavioral/Risk Metrics | `notebook_1.ipynb`, `csv_files/03_*.csv`, `csv_files/04_*.csv`, `outputs/06_*.png` | `[~]` Code Ready |
-| **Phase 5** | Statistical Testing, Segmentation & Deep-Dive Modeling | `notebook_2.ipynb`, `csv_files/03_*.csv`, `outputs/07_*` – `09_*.png` | `[ ]` Not Started |
+| **Phase 4** | Feature Engineering & Behavioral/Risk Metrics | `notebook_1.ipynb`, `csv_files/03_*.csv`, `csv_files/04_*.csv`, `outputs/06_*.png` | `[x]` Completed |
+| **Phase 5** | Statistical Testing, Segmentation & Deep-Dive Modeling | `notebook_2.ipynb`, `csv_files/03_*.csv`, `outputs/07_*` – `09_*.png` | `[~]` Code Ready |
 | **Phase 6** | Synthesis, Strategy Signals & Final Report Compilation | `notebook_2.ipynb`, `ds_report.pdf`, `README.md` | `[ ]` Not Started |
 
 ---
@@ -168,23 +168,23 @@ Traders-Behavior-Analysis/
 ### Phase 4: Feature Engineering & Behavioral/Risk Metrics (`notebook_1.ipynb`)
 **Goal:** Transform raw trade-level records into rich daily-regime features and account-level behavioral profiles for rigorous modeling in `notebook_2.ipynb`.
 
-- [~] **Trade-Level Enriched Features:**
-  - [~] `net_pnl_after_fee`, `is_win`, `is_loss`
-  - [~] `return_on_notional_pct = 100 * closed_pnl / size_usd`
-  - [~] `fee_bps` and `position_turnover_ratio`
-  - [~] `is_contrarian_open` & `is_momentum_open`
-  - [~] `regime_streak_days`, `regime_transition_flag`, `sentiment_7d_ma`, `sentiment_7d_vol`, `sentiment_value_lag3`
-- [~] **Daily Aggregated Behavioral Dataset (`03_features_daily_regime.csv`):**
-  - [~] Daily trade count, active accounts, unique coins, total volume, median/mean/P90 trade size, taker %, spot %, win rate, profit factor, net PnL, PnL dispersion (`pnl_std_usd`), max single loss.
-  - [~] Daily `open_long_share_pct`, `contrarian_open_pct`, and backward-looking 7-day rolling totals (`roll7d_trades`, `roll7d_volume_usd`, `roll7d_net_pnl`).
-- [~] **Trader-Level Behavioral Profile Dataset (`04_features_trader_profiles.csv`):**
-  - [~] Activity metrics: `total_trades`, `active_days`, `trades_per_active_day`, `span_calendar_days`, `unique_coins`, `top_coin`, `top_coin_vol_share_pct`.
-  - [~] Performance & risk metrics: `net_pnl_usd`, `win_rate_pct`, `profit_factor`, `pnl_per_1m_volume`, `daily_pnl_ir`, `max_daily_drawdown_usd`, `profitable_days_pct`.
-  - [~] Execution & regime-conditional metrics: `taker_pct`, `spot_pct`, `avg_fee_bps`, `size_cv`, Fear-vs-Greed volume/PnL/win-rate splits, `contrarian_open_share_pct`, `contrarian_bias_shift`.
-- [ ] **Feature Validation & Visual Exports (run Phase 4 cells):**
-  - [ ] Verify zero infinite values and zero look-ahead leakage in engineered features.
-  - [ ] Export `csv_files/03_features_daily_regime.csv` and `csv_files/04_features_trader_profiles.csv`.
-  - [ ] Save `outputs/06_features_distributions.png`, `outputs/06_features_summary_table.png`, and `outputs/06_features_fear_vs_greed_trader_scatter.png`.
+- [x] **Trade-Level Enriched Features:**
+  - [x] `net_pnl_after_fee`, `is_win`, `is_loss`
+  - [x] `return_on_notional_pct = 100 * closed_pnl / size_usd`
+  - [x] `fee_bps` and `position_turnover_ratio`
+  - [x] `is_contrarian_open` & `is_momentum_open`
+  - [x] `regime_streak_days`, `regime_transition_flag`, `sentiment_7d_ma`, `sentiment_7d_vol`, `sentiment_value_lag3`
+- [x] **Daily Aggregated Behavioral Dataset (`03_features_daily_regime.csv`):**
+  - [x] Daily trade count, active accounts, unique coins, total volume, median/mean/P90 trade size, taker %, spot %, win rate, profit factor, net PnL, PnL dispersion (`pnl_std_usd`), max single loss.
+  - [x] Daily `open_long_share_pct`, `contrarian_open_pct`, and backward-looking 7-day rolling totals (`roll7d_trades`, `roll7d_volume_usd`, `roll7d_net_pnl`).
+- [x] **Trader-Level Behavioral Profile Dataset (`04_features_trader_profiles.csv`):**
+  - [x] Activity metrics: `total_trades`, `active_days`, `trades_per_active_day`, `span_calendar_days`, `unique_coins`, `top_coin`, `top_coin_vol_share_pct`.
+  - [x] Performance & risk metrics: `net_pnl_usd`, `win_rate_pct`, `profit_factor`, `pnl_per_1m_volume`, `daily_pnl_ir`, `max_daily_drawdown_usd`, `profitable_days_pct`.
+  - [x] Execution & regime-conditional metrics: `taker_pct`, `spot_pct`, `avg_fee_bps`, `size_cv`, Fear-vs-Greed volume/PnL/win-rate splits, `contrarian_open_share_pct`, `contrarian_bias_shift`.
+- [x] **Feature Validation & Visual Exports (run Phase 4 cells):**
+  - [x] Verify zero infinite values and zero look-ahead leakage in engineered features.
+  - [x] Export `csv_files/03_features_daily_regime.csv` and `csv_files/04_features_trader_profiles.csv`.
+  - [x] Save `outputs/06_features_distributions.png`, `outputs/06_features_summary_table.png`, and `outputs/06_features_fear_vs_greed_trader_scatter.png`.
 
 ---
 

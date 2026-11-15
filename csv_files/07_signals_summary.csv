@@ -1,0 +1,12 @@
+section,name,metric_1_name,metric_1_val,metric_2_name,metric_2_val,n_obs
+TimeSeriesCV_Model,target_high_vol | LogisticRegression,cv_roc_auc_mean,0.5787505680158926,cv_bal_acc_mean,0.5403301732879532,352
+TimeSeriesCV_Model,target_high_vol | RandomForest,cv_roc_auc_mean,0.5027446789842631,cv_bal_acc_mean,0.5150999789817751,352
+TimeSeriesCV_Model,target_profitable | LogisticRegression,cv_roc_auc_mean,0.5818789766113266,cv_bal_acc_mean,0.5023491742500842,352
+TimeSeriesCV_Model,target_profitable | RandomForest,cv_roc_auc_mean,0.48562903679718045,cv_bal_acc_mean,0.5043410852713178,352
+Daily_Flow_Tilt,Fear | Contrarian-Majority Day,mean_win_rate_pct,83.69787631208136,mean_pnl_k,43.4681840288802,60
+Daily_Flow_Tilt,Fear | Momentum-Majority Day,mean_win_rate_pct,84.14433809511327,mean_pnl_k,31.09675055580911,39
+Daily_Flow_Tilt,Greed | Contrarian-Majority Day,mean_win_rate_pct,86.45567867905474,mean_pnl_k,24.255997795352858,151
+Daily_Flow_Tilt,Greed | Momentum-Majority Day,mean_win_rate_pct,81.02531784496277,mean_pnl_k,8.341766889926905,156
+Style_Cohort,Contrarian-Tilted (>=60%),cum_net_pnl_usd,6026868.5974163525,max_drawdown_usd,-51642.279554655775,13
+Style_Cohort,Balanced (40-60%),cum_net_pnl_usd,3500360.633753108,max_drawdown_usd,-170721.31896821,8
+Style_Cohort,Momentum-Tilted (<40%),cum_net_pnl_usd,523871.99170080945,max_drawdown_usd,-460656.7853547577,11
