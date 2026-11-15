@@ -1,0 +1,15 @@
+Metric,Value
+Raw Sentiment Rows,"2,644"
+Clean Sentiment Rows,"2,644"
+Missing Sentiment Calendar Days,4
+Sentiment Date Window,2018-02-01 to 2025-05-02
+Raw Trader Rows,"211,224"
+Exact Duplicate Trader Rows Removed,0
+Critical Null Rows Dropped,0
+Clean & Merged Trader Rows,"211,224"
+Trader UTC Date Window,2023-04-30 to 2025-05-01
+Unique Accounts / Unique Coins,32 / 246
+Trades Matched to Sentiment (UTC),"211,224 (100.00%)"
+Trades Shifting Date IST -> UTC,"53,322 (25.24%)"
+Spot Index Trades (@coin),"33,986 (16.09%)"
+Closing / Realized-PnL Trades,"104,408 (49.43%)"
