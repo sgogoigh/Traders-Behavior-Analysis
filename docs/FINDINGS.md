@@ -114,13 +114,49 @@
 
 ## Phase 5: Statistical Testing, Trader Segmentation & Signal Discovery
 
-- **Status:** Code Ready in `notebook_2.ipynb` (Sections 1–4; awaiting user execution in Jupyter)
-- **Planned Outputs:**
-  - `csv_files/05_stats_regime_tests.csv`, `csv_files/05_stats_bootstrap_ci.csv`, `csv_files/06_trader_clusters.csv`, `csv_files/06_cluster_summary.csv`, `csv_files/07_signals_summary.csv`
-  - `outputs/07_stats_*.png`, `outputs/08_clusters_*.png`, `outputs/09_signals_*.png`
+- **Status:** Completed (executed locally by user in `notebook_2.ipynb` Sections 1–4)
+
+### 5A. Hypothesis Testing & Bootstrap Confidence Intervals (`05_stats_regime_tests.csv`, `05_stats_bootstrap_ci.csv`)
+- **Multiple-Testing Summary:** Out of **19 continuous & contingency tests** across the 5 sentiment regimes (`Kruskal-Wallis H` / `Chi-Square`) and coarse `Fear` vs `Greed` (`Mann-Whitney U` / `Chi-Square`), **17/19** 5-regime tests and **16/19** `Fear` vs `Greed` pairwise tests remain statistically significant after Benjamini-Hochberg FDR adjustment (`p_fdr < 0.05`).
+- **Validated Daily-Level Regime Differences (`Fear n = 103 days` vs `Greed n = 309 days`, medians):**
+  - **Daily Spot Share:** **8.36%** in Fear vs **0.00%** in Greed (`Cliff's Delta = +0.512`, FDR `p = 3.91e-17`) — *Simpson/aggregation distinction:* trade-weighted spot share is conversely **10.04%** in Fear vs **23.51%** in Greed (`Cramér's V = 0.179`, FDR `p ≈ 0`) because high-frequency spot accounts concentrate bursts on Greed days.
+  - **Daily Active Accounts & Trade Count:** **8.0** vs **2.0** active accounts/day (`Cliff's Delta = +0.385`, FDR `p = 4.85e-09`) and **269** vs **61** trades/day (`Cliff's Delta = +0.227`, FDR `p = 9.57e-04`).
+  - **Daily Volume & Net PnL After Fees:** **\$711,405.40** vs **\$270,989.97** median daily volume (`Cliff's Delta = +0.196`, FDR `p = 4.61e-03`; 2,000-resample Bootstrap 95% CI diff = **+\$0.44M**, `[+\$0.02M, +\$2.48M]`, excludes 0) and **\$4,057.19** vs **\$1,070.27** median daily net PnL after fees (`Cliff's Delta = +0.158`, FDR `p = 2.26e-02`; mean daily gross PnL diff = **+\$21.90K**, 95% CI `[+\$3.90K, +\$41.51K]`).
+  - **Null / Non-Significant Daily Shifts:** Daily `win_rate_pct` (`94.08%` vs `96.07%`, FDR `p = 0.432`), daily `taker_pct` (`76.32%` vs `85.14%`, FDR `p = 0.619`), and daily `open_long_share_pct` (`67.94%` vs `51.15%`, FDR `p = 0.085`) do not reach `p_fdr < 0.05` pairwise at the unweighted day level.
+- **Validated Trade-Level Regime Shifts (`N = 211,224` trades; `N = 104,408` closing; `N = 89,636` perp opens):**
+  - **Perp Directional Contrarianism (`Open Long` Share):** **61.02%** in Fear (`n = 37,522`) vs **43.95%** in Greed (`n = 33,281`) — a **+17.07 pp** jump (1,000-resample Bootstrap 95% CI `[+16.34 pp, +17.83 pp]`, `Cramér's V = 0.171`, FDR `p ≈ 0`).
+  - **Closing Win Rate & Notional Size:** Win rate is **84.44%** in Fear vs **83.31%** in Greed (**+1.13 pp**, 95% CI `[+0.65 pp, +1.61 pp]`, `Cramér's V = 0.015`, FDR `p = 1.39e-05`), and median trade size is **\$730.83** vs **\$550.02** (**+\$180.81**, 95% CI `[+\$163.12, +\$198.36]`, Rank-Biserial `= +0.096`, FDR `p = 3.26e-258`).
+  - **Per-Dollar Return on Notional:** **2.43%** mean in Fear vs **5.80%** in Greed (`Rank-Biserial = -0.149`, FDR `p ≈ 0`), showing higher percentage efficiency per notional dollar in Greed despite lower total daily Fear volume.
+
+### 5B. Trader Segmentation & Archetype Profiles (`06_trader_clusters.csv`, `06_cluster_summary.csv`)
+- **Clustering Diagnostics:** Evaluated `KMeans` (`k = 2..7`) with `RobustScaler` on 11 complete (`32/32` non-null) behavioral, sizing, execution, risk-adjusted return, and contrarian features. Among `k >= 3`, **`k = 3`** achieved both the highest Silhouette Score (**`~0.237`**) and the lowest Davies-Bouldin Index (**`~1.10`**), with 2D PCA capturing **54.5%** of variance (`PC1 = 34.9%`, `PC2 = 19.6%`).
+- **Three Validated Trader Archetypes (`32` accounts):**
+  1. **`C0: Taker-Heavy` (`n = 24` accounts):** `182,124` trades, **\$522.17M** total volume, **+\$7.83M** net PnL after fees (`82.82%` mean win rate, `0.305` mean daily IR, **\$13,046.75** per USD 1M volume, `49.23%` mean taker, `48.39%` contrarian open share, `-\$56.82K` mean max daily drawdown).
+  2. **`C1: Taker-Heavy Alpha Contrarian` (`n = 5` accounts):** Compact volume (**\$9.59M** across `4,442` trades) but generated **+\$1.20M** net PnL after fees — **\$121,353.91 mean PnL per USD 1M volume** (`94.04%` win rate, `0.384` daily IR, `64.94%` contrarian open share, `25.78%` spot share, **+18.24 pp** Fear-minus-Greed contrarian bias shift, and shallowest mean max drawdown at **-\$5.11K**).
+  3. **`C2: High-Vol Taker-Heavy Low-Margin` (`n = 3` accounts: `0x4f93...f760`, `0x513b...4ff1`, `0xb899...2115`):** Accounted for **\$659.43M** (**55.4%** of platform notional volume) across `24,658` trades with **88.09%** taker execution and only **2.76%** spot, yet realized only **+\$1.03M** net PnL after fees — just **\$1,528.71 per USD 1M volume**, lowest daily IR (**0.241**), and deepest mean max daily drawdown (**-\$81.37K**).
+
+### 5C. Regime Transitions, Contrarian vs Momentum Cohorts & Predictive Check (`07_signals_summary.csv`)
+- **Regime-Transition Event Study (`t-3 .. t+5` calendar window):** Across `Shift into Fear (n = 31)` vs `Shift into Greed (n = 26)`, perp `Open-Long Share` climbs above **~72% at `t-1`** before `Fear` onset and dips to **~45% at `t+1`**, while calendar daily net PnL stays around **USD 17K–21K/day** over `t = 0..t+3`. Conversely, `Shift into Greed` sees volume peak near **~USD 4.2M at `t-1`** before daily net PnL compresses toward **~USD 0 at `t+2`**.
+- **Contrarian vs Momentum Cohort Realized Performance (Non-Zero Closing Attribution):** Grouping all 32 accounts by contrarian open tendency reveals sharp monotonic risk-adjusted separation:
+  - **Contrarian-Tilted (`>= 60%`, `n = 13`):** **+\$6,026,868.60** cumulative net PnL after fees, Max Cohort Drawdown **-\$51,642.28**.
+  - **Balanced (`40–60%`, `n = 8`):** **+\$3,500,360.63** cumulative net PnL after fees, Max Cohort Drawdown **-\$170,721.32**.
+  - **Momentum-Tilted (`< 40%`, `n = 11`):** **+\$523,871.99** cumulative net PnL after fees, Max Cohort Drawdown **-\$460,656.79** (`~8.9x` larger drawdown and `~11.5x` lower cumulative PnL than the Contrarian-Tilted cohort!).
+  - Across Fear & Greed trading days, **Contrarian-Majority Days** also outperformed **Momentum-Majority Days** on mean daily net PnL in both Fear (`$43.47K` vs `$31.10K`, `n = 60` vs `39`) and Greed (`$24.26K` vs `$8.34K`, `n = 151` vs `156`). Account-level linear correlation between `contrarian_open_share_pct` and `daily_pnl_ir` across all 32 traders alone is weak (`Spearman r = +0.085, p = 0.642`), indicating that execution discipline & sizing interact strongly with contrarian bias.
+- **Time-Aware Predictive Check (`5-fold TimeSeriesSplit`, `N = 352` strictly lagged daily rows):**
+  - Linear `LogisticRegression` achieved modest above-chance out-of-sample discrimination (`CV ROC-AUC = 0.579` for `target_high_vol`; `CV ROC-AUC = 0.582` for `target_profitable`), whereas non-linear `RandomForestClassifier` hovered near random (`0.503` and `0.486`), demonstrating that strictly lagged daily behavioral/sentiment predictors carry genuine **regime/conditioning value** rather than standalone next-day alpha forecasting.
+- **Visual Outputs Inspected:**
+  - `outputs/07_stats_summary_table.png`, `outputs/07_stats_hypothesis_tests.png`, `outputs/07_stats_bootstrap_ci.png`, `outputs/08_clusters_k_selection.png`, `outputs/08_clusters_projection.png`, `outputs/08_clusters_profiles.png`, `outputs/08_clusters_regime_performance.png`, `outputs/09_signals_regime_transition_event_study.png`, `outputs/09_signals_contrarian_vs_momentum.png`, `outputs/09_signals_feature_importance.png`
 
 ---
 
 ## Phase 6: Insights Synthesis & Final Report (`ds_report.pdf`)
 
-- **Status:** Not Started
+- **Status:** Generated & Visually Inspected (`ds_report.pdf`, **6 pages**, **3,905.3 KB** via `fpdf2`); **Page 1 minor layout & prose fix patched** in `notebook_2.ipynb` Section 5 (re-run Section 5 to refresh PDF).
+- **Verified Summary Across Report (`ds_report.pdf` + `notebook_2.ipynb`):**
+  - **Global Totals (`211,224` fills / `32` accounts / `246` coins / `476` active UTC days):** **\$1,191.19M** total notional volume, **+\$10.30M** gross closed PnL, **\$245.9K** total fees paid, **+\$10.05M** net PnL after fees, and **83.20%** global closing-trade win rate (`104,408` closing fills).
+  - **Report Inspection Notes:**
+    - Visual inspection of all 6 pages confirmed Pages 2–6 rendered cleanly with zero chart clipping or text overlap across Figures 1–9 and the Cluster Summary table.
+    - Page 1 inspection caught two issues that have now been fixed in `notebook_2.ipynb` (`nb2-sec5-code`): (1) `13.57%` typo corrected dynamically to `{100.0 * n_date_shifted / tot_trades:.2f}%` (**25.24%** for `53,322` midnight-shifted trades), and (2) `Operational Context / Scope` column in the KPI scorecard changed from right-aligned (`R`) to left-aligned (`L`) with tightened column widths `[48, 56, 82]` so cell text stays cleanly inside borders.
+- **Repository Finalization:**
+  - Updated [`requirements.txt`](../requirements.txt) with all direct and key transitive runtime dependencies (`tzdata`, `pytz`, `python-dateutil`, `six`, `fonttools`, `defusedxml`, `joblib`, `threadpoolctl`, `patsy`, `contourpy`, `cycler`, `kiwisolver`, `packaging`, `pyparsing`, `ipython`, `ipywidgets`).
+  - Updated [`README.md`](../README.md) with verified quantitative results, repository inventory, and local Jupyter setup instructions.

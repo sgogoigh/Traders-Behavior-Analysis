@@ -33,8 +33,8 @@ Traders-Behavior-Analysis/
 | **Phase 2** | Data Cleaning, Normalization & Temporal Alignment | `notebook_1.ipynb`, `csv_files/01_*.csv`, `outputs/01_*.png` | `[x]` Completed |
 | **Phase 3** | Exploratory Data Analysis (EDA) & Visual Logging | `notebook_1.ipynb`, `outputs/02_*` – `05_*.png` | `[x]` Completed |
 | **Phase 4** | Feature Engineering & Behavioral/Risk Metrics | `notebook_1.ipynb`, `csv_files/03_*.csv`, `csv_files/04_*.csv`, `outputs/06_*.png` | `[x]` Completed |
-| **Phase 5** | Statistical Testing, Segmentation & Deep-Dive Modeling | `notebook_2.ipynb`, `csv_files/03_*.csv`, `outputs/07_*` – `09_*.png` | `[~]` Code Ready |
-| **Phase 6** | Synthesis, Strategy Signals & Final Report Compilation | `notebook_2.ipynb`, `ds_report.pdf`, `README.md` | `[ ]` Not Started |
+| **Phase 5** | Statistical Testing, Segmentation & Deep-Dive Modeling | `notebook_2.ipynb`, `csv_files/03_*.csv`, `outputs/07_*` – `09_*.png` | `[x]` Completed |
+| **Phase 6** | Synthesis, Strategy Signals & Final Report Compilation | `notebook_2.ipynb`, `ds_report.pdf`, `README.md` | `[x]` Completed (re-run Sec 5 for Page 1 table polish) |
 
 ---
 
@@ -191,47 +191,47 @@ Traders-Behavior-Analysis/
 ### Phase 5: Statistical Testing, Trader Segmentation & Deep-Dive Modeling (`notebook_2.ipynb`)
 **Goal:** Rigorously validate EDA hypotheses with statistical tests, segment traders into behavioral archetypes, and uncover predictive/actionable risk signals.
 
-- [ ] **Load Processed Artifacts:**
-  - [ ] Load `02_merged_trader_sentiment.csv`, `03_features_daily_regime.csv`, and `04_features_trader_profiles.csv` from `csv_files/`.
-  - [ ] Run schema & row-count assertions at top of `notebook_2.ipynb`.
-- [ ] **Hypothesis Testing Across Regimes:**
-  - [ ] Test whether trader PnL, win rate, notional volume, leverage, and long/short bias differ significantly across market sentiment/risk regimes:
-    - [ ] Non-parametric tests (Mann-Whitney U / Kruskal-Wallis H) for skewed distributions (PnL, volume, leverage).
-    - [ ] Proportion / contingency tests (Chi-Square / Fisher's Exact) for win rates and directional bias (`Long` vs `Short`).
-    - [ ] Effect sizes (Rank-Biserial Correlation, Cliff's Delta, Cramér's V) and multiple-testing correction (Benjamini-Hochberg FDR).
-    - [ ] Bootstrap 95% confidence intervals for regime-level mean/median differences.
-  - [ ] Export test results table to `csv_files/05_stats_regime_tests.csv`.
-  - [ ] Save `outputs/07_stats_hypothesis_tests.png` and `outputs/07_stats_bootstrap_ci.png`.
-- [ ] **Trader Segmentation & Archetype Discovery:**
-  - [ ] Filter or weight accounts by minimum activity threshold (avoid noisy 1-trade accounts skewing clustering; analyze low-activity cohort separately).
-  - [ ] Scale/transform skewed trader features (log1p + RobustScaler / StandardScaler).
-  - [ ] Determine optimal cluster count $k$ via Elbow, Silhouette Score, and Davies-Bouldin Index -> `outputs/08_clusters_k_selection.png`.
-  - [ ] Fit clustering (K-Means / GMM / Hierarchical) and assign interpretable behavioral labels (e.g., *Disciplined Contrarians*, *High-Leverage Momentum Chasers*, *Institutional Whales*, *Over-Traded Loss Leaders*).
-  - [ ] Visualize clusters via 2D PCA/UMAP scatter and normalized radar/heatmap profiles -> `outputs/08_clusters_projection.png`, `outputs/08_clusters_profiles.png`.
-  - [ ] Analyze how each trader archetype performs under each market sentiment/risk regime -> `outputs/08_clusters_regime_performance.png`.
-  - [ ] Export clustered profiles to `csv_files/06_trader_clusters.csv`.
-- [ ] **Regime-Transition, Drawdown & Signal Analysis:**
-  - [ ] Event study around sharp sentiment shifts (e.g., sudden transitions into Extreme Fear / Extreme Greed): track cumulative PnL, leverage spikes, and volume surges at $t-3 \dots t+5$ -> `outputs/09_signals_regime_transition_event_study.png`.
-  - [ ] Compare **Contrarian vs Momentum** strategies across regimes (equity curves, max drawdown, risk-adjusted return) -> `outputs/09_signals_contrarian_vs_momentum.png`.
-  - [ ] Optional predictive check: evaluate simple interpretable models (Logistic Regression / Random Forest / Gradient Boosting with time-aware CV) to predict profitable trade days or tail-loss risk from behavioral + sentiment features, inspecting feature importances (SHAP / permutation) -> `outputs/09_signals_feature_importance.png`.
+- [x] **Load Processed Artifacts:**
+  - [x] Load `02_merged_trader_sentiment.csv`, `03_features_daily_regime.csv`, and `04_features_trader_profiles.csv` from `csv_files/`.
+  - [x] Run schema & row-count assertions at top of `notebook_2.ipynb`.
+- [x] **Hypothesis Testing Across Regimes:**
+  - [x] Test whether trader PnL, win rate, notional volume, position size, and long/short bias differ significantly across market sentiment/risk regimes (note: raw Hyperliquid schema has no leverage column):
+    - [x] Non-parametric tests (Mann-Whitney U / Kruskal-Wallis H) for skewed distributions (PnL, volume, trade size, return on notional).
+    - [x] Proportion / contingency tests (Chi-Square) for win rates, taker/spot shares, and directional bias (`Open Long` vs `Open Short`).
+    - [x] Effect sizes (Rank-Biserial Correlation, Cliff's Delta, Cramér's V) and multiple-testing correction (Benjamini-Hochberg FDR).
+    - [x] Bootstrap 95% confidence intervals for regime-level mean/median differences.
+  - [x] Export test results table to `csv_files/05_stats_regime_tests.csv` and `csv_files/05_stats_bootstrap_ci.csv`.
+  - [x] Save `outputs/07_stats_hypothesis_tests.png`, `outputs/07_stats_bootstrap_ci.png`, and `outputs/07_stats_summary_table.png`.
+- [x] **Trader Segmentation & Archetype Discovery:**
+  - [x] Verify activity threshold across all 32 accounts (`min = 332` trades; all 32 retained without noisy 1-trade outliers).
+  - [x] Scale/transform skewed trader features (log1p + RobustScaler on complete 32/32 behavioral metrics).
+  - [x] Determine optimal cluster count $k$ via Elbow, Silhouette Score, and Davies-Bouldin Index -> `outputs/08_clusters_k_selection.png`.
+  - [x] Fit clustering (`KMeans`, $k=3$) and assign interpretable behavioral labels (`C0: Taker-Heavy`, `C1: Taker-Heavy Alpha Contrarian`, `C2: High-Vol Taker-Heavy Low-Margin`).
+  - [x] Visualize clusters via 2D PCA scatter and normalized heatmap profiles -> `outputs/08_clusters_projection.png`, `outputs/08_clusters_profiles.png`.
+  - [x] Analyze how each trader archetype performs under each market sentiment/risk regime -> `outputs/08_clusters_regime_performance.png`.
+  - [x] Export clustered profiles to `csv_files/06_trader_clusters.csv` and `csv_files/06_cluster_summary.csv`.
+- [x] **Regime-Transition, Drawdown & Signal Analysis:**
+  - [x] Event study around calendar sentiment transitions into Fear (`n=31`) vs Greed (`n=26`) at $t-3 \dots t+5$ -> `outputs/09_signals_regime_transition_event_study.png`.
+  - [x] Compare **Contrarian vs Momentum** cohorts and daily flow-tilt performance across regimes (equity curves, max drawdown, IR) -> `outputs/09_signals_contrarian_vs_momentum.png`.
+  - [x] Time-aware predictive check: evaluate Logistic Regression & Random Forest (`TimeSeriesSplit(5)`) predicting high-volume and profitable days from strictly lagged behavioral + sentiment features, inspecting permutation importances -> `outputs/09_signals_feature_importance.png`, `csv_files/07_signals_summary.csv`.
 
 ---
 
 ### Phase 6: Insights Synthesis, Recommendations & Final Report (`notebook_2.ipynb` & `ds_report.pdf`)
 **Goal:** Distill analytical findings into clear, evidence-backed insights, compile `ds_report.pdf`, and ensure the entire repository is publication-ready.
 
-- [ ] **Synthesize Key Findings & Trading/Risk Signals:**
-  - [ ] Summarize top 5–7 quantitative findings with exact effect sizes, confidence intervals, and supporting chart references.
-  - [ ] Formulate concrete risk-management & strategy recommendations (e.g., leverage caps during high-greed/high-volatility regimes, contrarian sizing rules, regime-aware position filters).
-  - [ ] Explicitly document data limitations, survivorship/selection biases, sample coverage gaps, and confounding factors.
-- [ ] **Generate `ds_report.pdf`:**
-  - [ ] Build a clean, reproducible report script or notebook section (e.g., using `fpdf2` or `matplotlib`/`weasyprint`) that embeds curated `outputs/*.png` charts, KPI summary tables, methodology, insights, and recommendations into `ds_report.pdf`.
-  - [ ] Visually inspect every page of `ds_report.pdf` for layout, legibility, chart clipping, and accurate numbers.
-- [ ] **Final Repository QA & Documentation:**
-  - [ ] Re-run `notebook_1.ipynb` end-to-end (`Restart & Run All`) and confirm zero errors and clean outputs.
-  - [ ] Re-run `notebook_2.ipynb` end-to-end (`Restart & Run All`) and confirm zero errors and clean outputs.
-  - [ ] Update `README.md` with final project summary, folder inventory, setup/run instructions, and embedded preview of key charts.
-  - [ ] Update all checkboxes in `docs/PLAN.md` to reflect final completion status.
+- [x] **Synthesize Key Findings & Trading/Risk Signals:**
+  - [x] Summarize top 5–7 quantitative findings with exact effect sizes, confidence intervals, and supporting chart references.
+  - [x] Formulate concrete risk-management & strategy recommendations (contrarian scaling with maker discipline, Greed exhaustion trimming, turnover efficiency monitoring, lagged conditioning filter).
+  - [x] Explicitly document data limitations, account concentration, missing explicit leverage column, closing-leg PnL timing, and sample coverage caveats.
+- [x] **Generate & Inspect `ds_report.pdf`:**
+  - [x] Build a reproducible report section (`notebook_2.ipynb` Section 5 using `fpdf2`) embedding curated `outputs/*.png` charts, KPI/cluster summary tables, insights, and recommendations into `ds_report.pdf`.
+  - [x] Visually inspect all 6 pages of `ds_report.pdf` (Pages 2–6 clean; fixed Page 1 KPI table alignment + `25.24%` date-shift metric in `notebook_2.ipynb`).
+- [ ] **Final Repository QA & Re-run Verification:**
+  - [ ] Reload & re-run `notebook_2.ipynb` Section 5 (or `Restart & Run All` on `notebook_1.ipynb` and `notebook_2.ipynb`) to refresh `ds_report.pdf` with the Page 1 KPI table fix.
+  - [x] Update `requirements.txt` with all direct and key transitive runtime dependencies.
+  - [x] Update `README.md` with final project summary, folder inventory, verified findings, and setup/run instructions.
+  - [x] Update checkboxes in `docs/PLAN.md` to reflect verified completion status.
 
 ---
 
