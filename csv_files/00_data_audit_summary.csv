@@ -1,0 +1,21 @@
+dataset,column,dtype,non_null,null_count,null_pct,n_unique,sample_value
+fear_greed_index,timestamp,int64,2644,0,0.0,2644,1517463000
+fear_greed_index,value,int64,2644,0,0.0,90,30
+fear_greed_index,classification,str,2644,0,0.0,5,Fear
+fear_greed_index,date,str,2644,0,0.0,2644,2018-02-01
+historical_data,Account,str,211224,0,0.0,32,0xae5eacaf9c6b9111fd53034a602c192a04e082ed
+historical_data,Coin,str,211224,0,0.0,246,@107
+historical_data,Execution Price,float64,211224,0,0.0,60162,7.9769
+historical_data,Size Tokens,float64,211224,0,0.0,59304,986.87
+historical_data,Size USD,float64,211224,0,0.0,118493,7872.16
+historical_data,Side,str,211224,0,0.0,2,BUY
+historical_data,Timestamp IST,str,211224,0,0.0,27977,02-12-2024 22:50
+historical_data,Start Position,float64,211224,0,0.0,196923,0.0
+historical_data,Direction,str,211224,0,0.0,12,Buy
+historical_data,Closed PnL,float64,211224,0,0.0,90720,0.0
+historical_data,Transaction Hash,str,211224,0,0.0,101184,0xec09451986a1874e3a980418412fcd0201f500c95bac0f37caef8a734502ec49
+historical_data,Order ID,int64,211224,0,0.0,50555,52017706630
+historical_data,Crossed,bool,211224,0,0.0,2,True
+historical_data,Fee,float64,211224,0,0.0,138802,0.34540448
+historical_data,Trade ID,float64,211224,0,0.0,2810,895000000000000.0
+historical_data,Timestamp,float64,211224,0,0.0,7,1730000000000.0
