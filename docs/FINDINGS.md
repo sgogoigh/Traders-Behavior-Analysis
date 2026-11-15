@@ -65,18 +65,40 @@
 
 ## Phase 3: Exploratory Data Analysis (EDA)
 
-- **Status:** Code Ready in `notebook_1.ipynb` (awaiting user execution in Jupyter)
-- **Planned Sections:**
-  - **3A. Market Sentiment / Risk Regimes:** Full vs active-window regime distributions, transition matrix, streak durations (`outputs/02_eda_sentiment_*.png`).
-  - **3B. Trader Activity, Volume, Concentration & Profitability:** Global KPIs table image, PnL & volume distributions, execution/side/spot-vs-perp mix, top coins, Lorenz concentration & account PnL ranking (`outputs/03_eda_*.png`).
-  - **3C. Behavior Across Market Sentiment Regimes:** Daily-normalized activity, profitability/win-rate/profit-factor, directional bias & taker aggression, and Day×Hour intensity heatmaps (`outputs/04_eda_*.png`).
-  - **3D. Correlation & Lead-Lag Analysis:** Daily Spearman/Pearson correlation heatmaps and lag `-5..+5` cross-correlations (`outputs/05_eda_*.png`).
+- **Status:** Completed
+- **Artifacts Generated:**
+  - CSVs: [`03a_eda_sentiment_summary.csv`](../csv_files/03a_eda_sentiment_summary.csv), [`03b_eda_global_kpis.csv`](../csv_files/03b_eda_global_kpis.csv), [`03b_eda_top_coins.csv`](../csv_files/03b_eda_top_coins.csv), [`03b_eda_account_overview.csv`](../csv_files/03b_eda_account_overview.csv), [`03c_eda_regime_summary.csv`](../csv_files/03c_eda_regime_summary.csv), [`03d_eda_correlations.csv`](../csv_files/03d_eda_correlations.csv), [`03d_eda_lead_lag.csv`](../csv_files/03d_eda_lead_lag.csv)
+  - Images: [`02_eda_sentiment_timeline.png`](../outputs/02_eda_sentiment_timeline.png), [`02_eda_sentiment_transitions.png`](../outputs/02_eda_sentiment_transitions.png), [`03_eda_global_kpis_table.png`](../outputs/03_eda_global_kpis_table.png), [`03_eda_pnl_distribution.png`](../outputs/03_eda_pnl_distribution.png), [`03_eda_volume_distribution.png`](../outputs/03_eda_volume_distribution.png), [`03_eda_execution_and_side.png`](../outputs/03_eda_execution_and_side.png), [`03_eda_symbol_breakdown.png`](../outputs/03_eda_symbol_breakdown.png), [`03_eda_trader_concentration.png`](../outputs/03_eda_trader_concentration.png), [`04_eda_regime_summary_table.png`](../outputs/04_eda_regime_summary_table.png), [`04_eda_activity_by_regime.png`](../outputs/04_eda_activity_by_regime.png), [`04_eda_pnl_by_regime.png`](../outputs/04_eda_pnl_by_regime.png), [`04_eda_risk_and_bias_by_regime.png`](../outputs/04_eda_risk_and_bias_by_regime.png), [`04_eda_temporal_heatmap_by_regime.png`](../outputs/04_eda_temporal_heatmap_by_regime.png), [`05_eda_correlation_heatmap.png`](../outputs/05_eda_correlation_heatmap.png), [`05_eda_lead_lag_analysis.png`](../outputs/05_eda_lead_lag_analysis.png)
+
+### 3A. Market Sentiment / Risk Regimes
+- **Full History vs Active Trading Window Skew:** Across 2018–2025 (`2,644` days), Fear regimes dominate (**48.75%**: `Fear` `29.54%`, `Extreme Fear` `19.21%`) vs Greed (**36.27%**). During the **476 active UTC trading days** (`2023-04-30` to `2025-05-01`), the market skewed strongly bullish/Greed: `Greed` **41.39%** (`197` days) + `Extreme Greed` **23.53%** (`112` days) = **64.92% Greed**, vs `Fear` **18.70%** (`89` days) and `Extreme Fear` **2.94%** (`14` days).
+- **Regime Persistence:** Next-day self-transition probabilities are high (`Extreme Greed` **83.1%**, `Extreme Fear` **82.1%**, `Greed` **78.8%**, `Fear` **78.1%**), whereas `Neutral` is the shortest/most transient bridge state (**64.1%** self-transition; mean streak **2.79 days** vs **5.93 days** for `Extreme Greed` [max `77d`] and **5.52 days** for `Extreme Fear` [max `74d`]).
+
+### 3B. Global Trader Activity, Volume, Concentration & Profitability
+- **Aggregate Scale:** **211,224 trades** across **32 accounts**, **246 coins**, and **476 active UTC days**, generating **$1,191,187,442.46** in notional volume.
+- **Heavy-Tailed Trade Sizing:** Median trade size is **$597.05** vs mean **$5,639.45** (`9.4×` median) and P95 **$20,023.01**.
+- **Cohort Profitability:** **29 of 32 accounts (90.6%)** are net profitable before fees (`28 of 32` net positive after fees). Aggregate gross profit = **$13,245,745.87**, gross loss = **-$2,948,786.93** (**Profit Factor = 4.492**), closing-trade win rate = **83.20%** (`104,408` closing fills), net closed PnL = **$10,296,958.94** (**$10,051,101.22** after **$245,857.72** fees).
+- **Whale & Asset Concentration:** Volume Gini across the 32 accounts = **0.708** (Trade Count Gini = **0.570**). Top volume account `0x513b...4ff1` drove **$420.88M** (**35.3%** of cohort volume), while top PnL leader `0xb123...ed23` earned **+$2.14M** (`0x0833...9012` **+$1.60M**). Top coins by volume: `BTC` (**$644.23M**, `+$868.0K` PnL), `HYPE` (**$141.99M**, `+$1.95M`), `SOL` (**$125.07M**, `+$1.64M`), `ETH` (**$118.28M**, `+$1.32M`), and `@107` (**$55.76M**, **+$2.78M** — #1 PnL asset). Largest loss assets: `TRUMP` (**-$364.8K**) and `FARTCOIN` (**-$100.7K**).
+
+### 3C. Trader Behavior & Performance Across Sentiment Regimes
+- **Fear Triggers Dramatic Activity Surges:** Daily-normalized trading intensity peaks in **`Extreme Fear`**: **1,521.64 trades/day**, **$8.316M/day**, **11.00 active accounts/day**, and **$76,595.28/day** net PnL — more than `6×` the daily trade rate and `6×` the daily volume of `Greed` (**247.05 trades/day**, **$1.368M/day**, **3.34 accounts/day**).
+- **Monotonic Position-Size Scaling:** Median trade size increases steadily as sentiment cools: `Extreme Greed` (**$500.20**) → `Greed` (**$555.00**) → `Neutral` (**$556.81**) → `Fear` (**$699.25**) → `Extreme Fear` (**$789.07**), with P90 trade size peaking in `Fear` (**$11,015.35**).
+- **Strong Contrarian Directional Bias:** On perpetual opens, `Open Long` share is **65.28%** in `Extreme Fear`, **59.62%** in `Fear`, and **65.69%** in `Neutral`, flipping to **Short-biased** in `Greed` (**41.59%** Open Long) and `Extreme Greed` (**47.17%** Open Long).
+- **Profitability Efficiency vs Volume Paradox:** `Extreme Fear` delivers the highest daily aggregate PnL (**$76.6K/day**) via sheer volume, yet exhibits the **lowest win rate (78.45%)** and **lowest profit factor (2.846)**. Conversely, **`Extreme Greed`** delivers the **highest win rate (88.91%)**, **highest mean PnL per closing trade ($124.92)**, and a **10.261 profit factor**, alongside the highest **spot-index share (26.94% vs 7.71% in Extreme Fear)** and **taker share (62.50% vs 59.47%)**.
+
+### 3D. Daily Correlations & Calendar Lead-Lag Dynamics
+- **Nonlinear Fear-Spike Effect:** Daily `sentiment_value` correlates negatively with `active_accounts` (Pearson `r = -0.286`, Spearman `r = -0.166`), `total_volume_usd` (Pearson `-0.274`, Spearman `-0.071`), `total_fees` (Pearson `-0.268`, Spearman `-0.198`), and `trade_count` (Pearson `-0.251`, Spearman `-0.050`). The larger Pearson vs Spearman magnitude confirms activity spikes concentrate in tail Fear episodes rather than shifting smoothly across moderate days.
+- **Lead-Lag Signature:** Across calendar lags `k ∈ [-5, +5]`, correlations remain modest (`|r| <= 0.115`). `buy_vol_pct` shows slight negative correlation at `k = -2` (`-0.113`) and `k = -1` (`-0.110`) before flattening near `0` at `k >= 0`, while `taker_pct` stays mildly negative (`-0.099` to `-0.115`) for `k = 0..+5`.
 
 ---
 
 ## Phase 4: Feature Engineering & Behavioral/Risk Metrics
 
-- **Status:** Not Started
+- **Status:** Code Ready in `notebook_1.ipynb` (awaiting user execution in Jupyter)
+- **Planned Outputs:**
+  - `csv_files/03_features_daily_regime.csv` (daily regime, rolling volume/PnL, dispersion, contrarian share)
+  - `csv_files/04_features_trader_profiles.csv` (32-account performance, drawdown/IR, taker/spot mix, Fear-vs-Greed behavior & contrarian bias shift)
+  - `outputs/06_features_distributions.png`, `outputs/06_features_summary_table.png`, `outputs/06_features_fear_vs_greed_trader_scatter.png`
 
 ---
 
