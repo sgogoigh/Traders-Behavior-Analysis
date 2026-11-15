@@ -1,0 +1,12 @@
+metric,spearman_vs_sentiment,pearson_vs_sentiment
+sentiment_value,1.0,1.0
+sentiment_delta_1d,0.1646,0.1795
+trade_count,-0.0501,-0.2507
+active_accounts,-0.1661,-0.286
+total_volume_usd,-0.0707,-0.2736
+median_size_usd,0.0088,0.0426
+net_pnl,0.015,-0.0926
+win_rate_pct,0.0722,0.0434
+taker_pct,-0.0994,-0.0565
+buy_vol_pct,-0.0206,0.0145
+total_fees,-0.1978,-0.2683

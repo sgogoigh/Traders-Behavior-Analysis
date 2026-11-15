@@ -1,0 +1,15 @@
+KPI,Value
+Total Executed Trades,"211,224"
+Unique Accounts / Coins,32 / 246
+Active UTC Trading Days,476
+Total Notional Volume (USD),"$1,191,187,442.46"
+Trade Size USD (Median / Mean / P95),"$597.05 / $5,639.45 / $20,023.01"
+Closing Trades (Closed PnL != 0),"104,408 (49.43%)"
+Closing-Trade Win Rate,83.20%
+Gross Profit / Gross Loss (USD),"$13,245,745.87 / -$2,948,786.93"
+Profit Factor (Gross Profit / |Loss|),4.492
+Net Closed PnL (Before Fees),"$10,296,958.94"
+Total Fees Paid,"$245,857.72"
+Net PnL After Fees,"$10,051,101.22"
+Taker Share / Maker Share,60.79% / 39.21%
+Perp-Standard / Spot-Index (@coin),83.91% / 16.09%

@@ -28,10 +28,10 @@ Traders-Behavior-Analysis/
 
 | Phase | Title | Primary Notebook / Deliverable | Status |
 | :--- | :--- | :--- | :--- |
-| **Phase 0** | Environment, Workspace & Conventions Setup | `requirements.txt`, `README.md`, `docs/PLAN.md` | `[x]` Initialized |
-| **Phase 1** | Data Acquisition & Initial Schema Inspection | `notebook_1.ipynb`, `csv_files/` | `[ ]` Pending Data |
-| **Phase 2** | Data Cleaning, Normalization & Temporal Alignment | `notebook_1.ipynb`, `csv_files/01_*.csv`, `outputs/01_*.png` | `[ ]` Not Started |
-| **Phase 3** | Exploratory Data Analysis (EDA) & Visual Logging | `notebook_1.ipynb`, `outputs/02_*` – `05_*.png` | `[ ]` Not Started |
+| **Phase 0** | Environment, Workspace & Conventions Setup | `requirements.txt`, `README.md`, `docs/PLAN.md` | `[x]` Completed |
+| **Phase 1** | Data Acquisition & Initial Schema Inspection | `notebook_1.ipynb`, `csv_files/` | `[x]` Completed |
+| **Phase 2** | Data Cleaning, Normalization & Temporal Alignment | `notebook_1.ipynb`, `csv_files/01_*.csv`, `outputs/01_*.png` | `[x]` Completed |
+| **Phase 3** | Exploratory Data Analysis (EDA) & Visual Logging | `notebook_1.ipynb`, `outputs/02_*` – `05_*.png` | `[~]` Code Ready |
 | **Phase 4** | Feature Engineering & Behavioral/Risk Metrics | `notebook_1.ipynb`, `csv_files/02_*.csv`, `outputs/06_*.png` | `[ ]` Not Started |
 | **Phase 5** | Statistical Testing, Segmentation & Deep-Dive Modeling | `notebook_2.ipynb`, `csv_files/03_*.csv`, `outputs/07_*` – `09_*.png` | `[ ]` Not Started |
 | **Phase 6** | Synthesis, Strategy Signals & Final Report Compilation | `notebook_2.ipynb`, `ds_report.pdf`, `README.md` | `[ ]` Not Started |
@@ -86,8 +86,8 @@ Traders-Behavior-Analysis/
   - [x] `notebook_2.ipynb` (starter scaffold)
 - [x] Create `requirements.txt` with core data science, visualization, statistics, and Jupyter packages.
 - [x] Create `docs/PLAN.md` with step-by-step phases and checklists.
-- [ ] Create and activate a local Python virtual environment (`.venv/`) and install `requirements.txt`.
-- [ ] Register Jupyter kernel (`python -m ipykernel install --user --name traders-behavior`) and verify `notebook_1.ipynb` launches locally.
+- [x] Create and activate a local Python virtual environment (`.venv/`) and install `requirements.txt`.
+- [x] Register Jupyter kernel (`python -m ipykernel install --user --name traders-behavior`) and verify `notebook_1.ipynb` launches locally.
 - [ ] Confirm `.gitignore` excludes `.venv/`, `.ipynb_checkpoints/`, and temporary cache files while keeping intentional outputs/docs tracked as desired.
 
 ---
@@ -95,44 +95,43 @@ Traders-Behavior-Analysis/
 ### Phase 1: Data Acquisition & Initial Schema Inspection (`notebook_1.ipynb`)
 **Goal:** Place raw datasets into `csv_files/` and perform a complete non-destructive structural audit.
 
-- [ ] Place raw trader dataset and market sentiment / market risk dataset into `csv_files/` (e.g., `raw_trader_data.csv`, `raw_market_sentiment.csv`).
-- [ ] Document dataset provenance, collection timeframe, and file sizes in `notebook_1.ipynb` Markdown notes.
-- [ ] Load datasets into pandas and inspect:
-  - [ ] Shape (row count, column count) and memory footprint (`df.info(memory_usage="deep")`).
-  - [ ] Exact column names, raw dtypes, and sample head/tail rows.
-  - [ ] Unique identifier cardinality (number of distinct accounts/traders, symbols/assets, sentiment classes).
-  - [ ] Date/time range coverage, granularity (tick/trade-level vs daily), and timezone indicators.
-- [ ] **Visual & Tabular Progress Artifacts:**
-  - [ ] Export initial data dictionary & summary profile table to `csv_files/00_data_audit_summary.csv`.
-  - [ ] Save `outputs/01_audit_schema_summary.png` (rendered summary card of row counts, date ranges, and column types).
-  - [ ] Save `outputs/01_audit_missingness.png` (missing value count/percentage bar chart or matrix per dataset).
+- [x] Place raw trader dataset and market sentiment / market risk dataset into `csv_files/` (`fear_greed_index.csv`, `historical_data.csv`).
+- [x] Document dataset provenance, collection timeframe, and file sizes in `notebook_1.ipynb` Markdown notes / `docs/FINDINGS.md`.
+- [x] Load datasets into pandas and inspect:
+  - [x] Shape (row count, column count) and memory footprint (`df.info(memory_usage="deep")`).
+  - [x] Exact column names, raw dtypes, and sample head/tail rows.
+  - [x] Unique identifier cardinality (number of distinct accounts/traders, symbols/assets, sentiment classes).
+  - [x] Date/time range coverage, granularity (tick/trade-level vs daily), and timezone indicators.
+- [x] **Visual & Tabular Progress Artifacts:**
+  - [x] Export initial data dictionary & summary profile table to `csv_files/00_data_audit_summary.csv`.
+  - [x] Save `outputs/01_audit_schema_summary.png` (rendered summary card of row counts, date ranges, and column types).
+  - [x] Save `outputs/01_audit_missingness.png` (missing value count/percentage bar chart or matrix per dataset).
 
 ---
 
 ### Phase 2: Data Cleaning, Normalization & Temporal Alignment (`notebook_1.ipynb`)
 **Goal:** Produce trustworthy, analysis-ready datasets with verified timestamp alignment between trader events and market risk/sentiment states.
 
-- [ ] **Column & Type Standardization:**
-  - [ ] Standardize column names to `snake_case` (strip whitespace, normalize casing).
-  - [ ] Cast numeric columns (`price`, `size`, `pnl`, `leverage`, `sentiment_value`, etc.) safely with coercion checks; inspect any failed parses.
-  - [ ] Standardize categorical labels (e.g., trade side `BUY`/`SELL` or `Long`/`Short`, sentiment regime labels, event types).
-- [ ] **Timestamp Parsing & Timezone Alignment:**
-  - [ ] Parse trader execution timestamps and market sentiment dates into timezone-aware UTC `datetime64`.
-  - [ ] Extract `trade_date` (UTC date), `hour_of_day`, `day_of_week`, and `week` columns.
-  - [ ] Check for overlap window between trader records and market sentiment dates; quantify and log any out-of-range dates.
-- [ ] **Data Quality Remediation:**
-  - [ ] Identify and quantify exact duplicate rows and near-duplicate executions; document deduplication rules.
-  - [ ] Audit missing values (drop vs impute vs flag) and justify every rule in Markdown.
-  - [ ] Inspect extreme values / outliers (zero or negative prices/sizes, extreme leverage, huge PnL spikes); keep raw values intact and add outlier-flag columns rather than silently deleting legitimate whale trades.
-- [ ] **Dataset Merging & Integrity Verification:**
-  - [ ] Join trader records with daily (and lagged `t-1`, `t+1`) market sentiment/risk states on `trade_date`.
-  - [ ] Assert post-merge row count preservation (no unintended many-to-many row explosion).
-  - [ ] Verify zero unexpected `NaN`s in key join columns.
-- [ ] **Checkpoint Exports:**
-  - [ ] Save cleaned datasets to `csv_files/01_clean_trader_data.csv` and `csv_files/01_clean_sentiment.csv`.
-  - [ ] Save merged dataset to `csv_files/02_merged_trader_sentiment.csv`.
-  - [ ] Save `outputs/01_audit_cleaning_funnel.png` (before/after row retention & cleaning summary chart).
-  - [ ] Save `outputs/01_audit_temporal_coverage.png` (daily trade volume vs sentiment coverage timeline).
+- [x] **Column & Type Standardization:**
+  - [x] Standardize column names to `snake_case` (strip whitespace, normalize casing).
+  - [x] Cast numeric columns (`execution_price`, `size_tokens`, `size_usd`, `start_position`, `closed_pnl`, `fee`, `value`, etc.) safely with coercion checks; inspect any failed parses.
+  - [x] Standardize categorical labels (`side`, `direction`, `crossed`, `classification`).
+- [x] **Timestamp Parsing & Timezone Alignment:**
+  - [x] Parse trader execution timestamps (`Timestamp IST` -> `UTC`) and market sentiment dates into timezone-aware UTC `datetime64`.
+  - [x] Extract `trade_date_utc`, `trade_date_ist`, `hour_utc`, and `day_of_week_utc` columns.
+  - [x] Check for overlap window between trader records and market sentiment dates; quantify IST-vs-UTC boundary shifts.
+- [x] **Data Quality Remediation:**
+  - [x] Identify and quantify exact duplicate rows and near-duplicate executions; preserve valid partial fills.
+  - [x] Audit missing values (`0` missing cells) and verify notional consistency (`0` mismatches).
+  - [x] Inspect extreme values / outliers (`> P99.9` size/PnL); keep raw values intact and add diagnostic flag columns.
+- [x] **Dataset Merging & Integrity Verification:**
+  - [x] Join trader records with daily (and lagged `t-1`) market sentiment/risk states on `trade_date_utc`.
+  - [x] Assert post-merge row count preservation (`211,224 -> 211,224`).
+  - [x] Verify zero unexpected `NaN`s in key join columns (`100.00%` matched).
+- [x] **Checkpoint Exports:**
+  - [x] Save cleaned datasets to `csv_files/01_clean_trader_data.csv` and `csv_files/01_clean_sentiment.csv`.
+  - [x] Save merged dataset to `csv_files/02_merged_trader_sentiment.csv` and `csv_files/02_phase2_cleaning_summary.csv`.
+  - [x] Save `outputs/01_audit_cleaning_funnel.png`, `outputs/01_audit_temporal_coverage.png`, and `outputs/01_audit_phase2_summary_table.png`.
 
 ---
 

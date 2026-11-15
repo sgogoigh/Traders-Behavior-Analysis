@@ -1,0 +1,6 @@
+classification,full_days,full_pct,window_days,window_pct,traded_days,traded_pct,mean_streak_days,max_streak_days
+Extreme Fear,508,19.21,15,2.05,14,2.94,5.52,74
+Fear,781,29.54,129,17.62,89,18.7,4.57,48
+Neutral,396,14.98,177,24.18,64,13.45,2.79,28
+Greed,633,23.94,295,40.3,197,41.39,4.69,42
+Extreme Greed,326,12.33,116,15.85,112,23.53,5.93,77
